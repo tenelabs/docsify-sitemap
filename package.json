@@ -1,0 +1,56 @@
+{
+  "name": "docsify-sitemap",
+  "displayName": "Docsify Sitemap Generator",
+  "version": "0.0.0",
+  "description": "Create structured, SEO-friendly sitemaps for your Docsify projects in seconds.",
+  "keywords": [
+    "docsify",
+    "sitemap",
+    "sitemap generator",
+    "docsify sitemap",
+    "docsify plugin",
+    "SEO",
+    "generate sitemap",
+    "documentation sitemap",
+    "docs site SEO",
+    "docsify tool"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Sriman",
+    "url": "https://github.com/TenEplaysOfficial"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "docsify-sitemap": "dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tenelabs/docsify-sitemap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tenelabs/docsify-sitemap/issues"
+  },
+  "homepage": "https://tenelabs.github.io/docsify-sitemap",
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/teneplays"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^13.1.0"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.1",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "release-it": "^19.0.2",
+    "rollup": "^4.40.2"
+  }
+}

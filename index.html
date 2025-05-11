@@ -4,6 +4,373 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Docsify Sitemap Generator</title>
+    <!-- style -->
+    <style>
+      :root {
+        --bg: ;
+        --text: ;
+        --max-width: 85rem;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        padding: 0 10px;
+        background-color: var(--bg);
+        color: var(--text);
+        margin: auto;
+        max-width: var(--max-width);
+      }
+      section {
+        margin: 15px 0;
+      }
+      section div {
+        margin: 15px 0;
+      }
+      ul {
+        list-style: none;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-list {
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .icon {
+        max-width: 25px;
+      }
+      /* form */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .cell {
+        display: flex;
+        flex-direction: column;
+      }
+      input {
+        height: 1rem;
+        width: 100%;
+        background-color: var(--bg);
+        border-radius: 0.375rem;
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 0 #000000;
+        padding: 1rem 0.75rem;
+        font-weight: bold;
+        outline: none;
+        color: var(--text);
+      }
+      input:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+      input::placeholder {
+        font-weight: normal;
+      }
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.375rem;
+        border: 3px solid black;
+        box-shadow: 4px 4px 0 0 #000000;
+        padding: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--text);
+        font-size: medium;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .box {
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 5px;
+        box-shadow: 4px 4px 0 0 #000000;
+      }
+
+      .box ol {
+        list-style-type: disc;
+        padding-left: 25px;
+      }
+
+      .box ol li {
+        font-size: 1rem;
+        font-weight: normal;
+        margin: 5px 0;
+      }
+
+      .output {
+        position: relative;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 15px 10px;
+        min-height: 10vh;
+        box-shadow: 4px 4px 0 0 #000000;
+      }
+
+      .copy {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        transition: background-color 0.2s ease;
+      }
+
+      .link {
+        text-decoration: underline;
+        color: blue;
+      }
+
+      .info {
+        margin: 6px 0 0 10px;
+      }
+
+      .buttons {
+        text-align: end;
+      }
+
+      @media (min-width: 640px) {
+        input {
+          font-size: 1.125rem;
+          padding: 1.5rem 1rem;
+        }
+        input::placeholder {
+          font-size: 1.125rem;
+        }
+      }
+
+      @media (min-width: 768px) {
+        input {
+          font-size: 1rem;
+        }
+      }
+      @media (max-width: 768px) {
+        .header {
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        nav {
+          align-items: center;
+        }
+        .header h1 {
+          font-size: 1.6rem;
+          text-wrap: nowrap;
+        }
+        section div {
+          margin: 0;
+        }
+        .grid {
+          grid-template-columns: repeat(1, 1fr);
+        }
+        .buttons {
+          text-align: center;
+        }
+        .button {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <header class="header">
+      <div style="display: flex; align-items: flex-end">
+        <h1 class="text-logo">Docsify Sitemap Generator</h1>
+        <p id="version"></p>
+      </div>
+      <nav>
+        <ul class="nav-list">
+          <li>
+            <!-- href="https://github.com/tenelabs/docsify-sitemap#readme" -->
+            <a href="#docs">Docs</a>
+          </li>
+          <li>
+            <a href="https://www.github.com/tenelabs">
+              <img
+                src="https://unpkg.com/pixelcdn@latest/public/image/github-dark.svg"
+                alt="npm"
+                title="NPM"
+                class="icon"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.npmjs.com/package/docsify-sitemap">
+              <img
+                src="https://unpkg.com/pixelcdn@latest/public/image/npm.svg"
+                alt="npm"
+                title="NPM"
+                class="icon"
+              />
+            </a>
+          </li>
+          <li>
+            <a href="https://www.x.com/teneplays">
+              <img
+                src="https://unpkg.com/pixelcdn@latest/public/image/twitter.svg"
+                alt="npm"
+                title="NPM"
+                class="icon"
+              />
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <h2>Genrate sitemap</h2>
+        <form id="sitemapForm">
+          <div class="grid">
+            <div class="cell">
+              <label for="website">Website URL</label>
+              <input
+                type="url"
+                id="website"
+                name="website"
+                placeholder="e.g. https://USERNAME.github.io/REPO-NAME"
+                required
+              />
+            </div>
+            <div class="cell">
+              <label for="owner">Repository Owner (Username)</label>
+              <input
+                type="text"
+                id="owner"
+                name="owner"
+                placeholder="e.g. USERNAME"
+                required
+              />
+            </div>
+            <div class="cell">
+              <label for="repo">Repository Name</label>
+              <input
+                type="text"
+                id="repo"
+                name="repo"
+                placeholder="e.g. REPO-NAME"
+                required
+              />
+            </div>
+            <div class="cell">
+              <label for="pat">GitHub Personal Access Token (PAT)</label>
+              <input
+                type="password"
+                id="pat"
+                name="pat"
+                placeholder="Paste your GitHub PAT here (optional)"
+              />
+              <small class="info">
+                Optional — used to avoid GitHub rate limits.
+                <a
+                  href="https://github.com/settings/tokens"
+                  target="_blank"
+                  rel="noopener"
+                  class="link"
+                  >Generate a token</a
+                >.
+              </small>
+            </div>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="button">
+              Generate Sitemap
+            </button>
+            <button type="button" class="button" id="downloadBtn">
+              Download Sitemap
+            </button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h3>Output:</h3>
+        <div class="output">
+          <pre>Click "Generate Sitemap" to start...</pre>
+          <button class="copy">Copy</button>
+        </div>
+      </section>
+      <div class="box">
+        <h3>Note</h3>
+        <ol>
+          <li>The repository must be public.</li>
+          <li>
+            This tool uses GitHub's free-tier API, which allows up to
+            <strong>60 requests per hour</strong> per IP address.
+          </li>
+          <li>
+            To increase the request limit (not unlimited, but significantly
+            higher), you can use a personal access token (PAT).
+          </li>
+          <li>
+            Paste your PAT key into the "Enter PAT" field to authenticate and
+            increase your limit.
+          </li>
+          <li>
+            Don’t know how to generate a PAT?
+            <a href="#" target="_blank">Click here for instructions.</a>
+          </li>
+        </ol>
+      </div>
+      <section id="docs"></section>
+    </main>
+    <footer style="text-align: center; padding: 20px 0">
+      <p>
+        &copy; <span id="current-year"></span>
+        <a href="https://github.com/tenelabs" class="link">TenE</a> All rights
+        reserved. |
+        <a href="https://opensource.org/licenses/MIT" target="_blank"
+          >MIT License</a
+        >
+      </p>
+    </footer>
+
+    <!-- script -->
+    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      (async function () {
+        try {
+          const res = await fetch("./package.json");
+          const pkg = await res.json();
+          document.getElementById("version").textContent = `v${pkg.version}`;
+        } catch (err) {
+          console.error("Failed to load version:", err);
+          document.getElementById("version").textContent = "";
+        }
+
+        try {
+          const res = await fetch("./README.md");
+          const md = await res.text();
+          const html = marked.parse(md);
+          document.getElementById("docs").innerHTML = html;
+        } catch (err) {
+          console.error("Failed to load README:", err);
+        }
+
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
+      })();
+    </script>
+  </body>
 </html>

@@ -1,0 +1,248 @@
+@import url("https://fonts.googleapis.com/css2?family=Cal+Sans&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --max-width: 85rem;
+  --font-primary: "Cal Sans", sans-serif;
+  --font-secondary: "Poppins", sans-serif;
+  --box-shadow: 4px 4px 0 0 #000000;
+  --border: 2px solid black;
+  --border-radius: 5px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  padding: 10px;
+  margin: auto;
+  max-width: var(--max-width);
+}
+
+.font-primary {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-secondary {
+  font-family: var(--font-secondary);
+  font-style: italic;
+}
+
+section {
+  margin: 15px 0;
+}
+
+section div {
+  margin: 15px 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon {
+  max-width: 25px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+}
+
+input {
+  height: 45px;
+  width: 100%;
+  padding: 1rem 0.75rem;
+  outline: none;
+  padding: 1.5rem 1rem;
+  font-family: var(--font-secondary);
+  font-style: italic;
+  font-size: 1.125rem;
+}
+
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+img,
+input::placeholder {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.buttons button:first-child {
+  margin-right: 15px;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 1px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease-in-out;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:hover {
+  transform: translate(-5px, -5px);
+}
+
+.box,
+#docs,
+button,
+input,
+.output {
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 5px;
+  box-shadow: var(--box-shadow);
+}
+
+.box ol {
+  list-style-type: disc;
+  padding-left: 25px;
+}
+
+.box ol li {
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 5px 0;
+}
+
+.output {
+  position: relative;
+  padding: 15px 10px;
+  min-height: 10vh;
+}
+
+.copy {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}
+
+.link {
+  text-decoration: underline;
+  color: blue;
+}
+
+.info {
+  margin: 6px 0 0 10px;
+}
+
+.buttons {
+  text-align: end;
+}
+
+pre[class*="language-"],
+code[class*="language-"] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.toc-list {
+  list-style: disc;
+}
+
+.toc-list li {
+  font-weight: 600;
+}
+
+/* docs */
+#docs ul {
+  list-style: disc;
+}
+
+#docs ul li {
+  margin-left: 25px;
+}
+
+#docs .content a {
+  text-decoration: underline;
+  color: blue;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  nav {
+    align-items: center;
+  }
+
+  .header h1 {
+    font-size: 1.6rem;
+    text-wrap: nowrap;
+  }
+
+  section div {
+    margin: 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .buttons {
+    text-align: center;
+  }
+
+  .buttons button:first-child {
+    margin: 15px 0;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

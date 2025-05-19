@@ -23,7 +23,6 @@
     />
     <link rel="manifest" href="./assets/favicon/site.webmanifest" />
     <!-- style -->
-    <link rel="stylesheet" href="./index.css" />
     <link
       rel="stylesheet"
       type="text/css"
@@ -33,17 +32,255 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism.min.css"
     />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cal+Sans&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+      :root {
+        --max-width: 85rem;
+        --font-primary: "Cal Sans", sans-serif;
+        --font-secondary: "Poppins", sans-serif;
+        --box-shadow: 4px 4px 0 0 #000000;
+        --border: 2px solid black;
+        --border-radius: 5px;
+      }
+
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        padding: 10px;
+        margin: auto;
+        max-width: var(--max-width);
+      }
+
+      .font-primary {
+        font-family: var(--font-primary);
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      .font-secondary {
+        font-family: var(--font-secondary);
+        font-style: italic;
+      }
+
+      section {
+        margin: 15px 0;
+      }
+
+      section div {
+        margin: 15px 0;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-list {
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .icon {
+        max-width: 25px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .cell {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: 600;
+      }
+
+      input {
+        height: 45px;
+        width: 100%;
+        padding: 1rem 0.75rem;
+        outline: none;
+        padding: 1.5rem 1rem;
+        font-family: var(--font-secondary);
+        font-style: italic;
+        font-size: 1.125rem;
+      }
+
+      input:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      img,
+      input::placeholder {
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      .buttons button:first-child {
+        margin-right: 15px;
+      }
+
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem;
+        font-family: var(--font-secondary);
+        font-weight: 600;
+        font-style: italic;
+        letter-spacing: 1px;
+        overflow: hidden;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease-in-out;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      button:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 5px 5px 0 0 #000000;
+      }
+
+      .box,
+      button,
+      input,
+      .output {
+        border: var(--border);
+        border-radius: var(--border-radius);
+        padding: 5px;
+        box-shadow: var(--box-shadow);
+      }
+
+      .box ol {
+        list-style-type: disc;
+        padding-left: 25px;
+      }
+
+      .box ol li {
+        font-size: 1rem;
+        font-weight: normal;
+        margin: 5px 0;
+      }
+
+      .output {
+        position: relative;
+        padding: 15px 10px;
+        min-height: 10vh;
+      }
+
+      .copy {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+      }
+
+      .link {
+        text-decoration: underline;
+        color: blue;
+      }
+
+      .info {
+        margin: 6px 0 0 10px;
+      }
+
+      .buttons {
+        text-align: end;
+      }
+
+      pre,
+      code {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        nav {
+          align-items: center;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+          text-wrap: nowrap;
+        }
+
+        section div {
+          margin: 0;
+        }
+
+        .grid {
+          grid-template-columns: repeat(1, 1fr);
+        }
+
+        .buttons {
+          text-align: center;
+        }
+
+        .buttons button:first-child {
+          margin: 15px 0;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body class="font-secondary">
     <header class="header">
       <div style="display: flex; align-items: flex-end">
-        <h1 class="font-primary">Docsify Sitemap Generator</h1>
+        <a href="/">
+          <h1 class="font-primary">Docsify Sitemap Generator</h1>
+        </a>
         <p id="version"></p>
       </div>
       <nav>
         <ul class="nav-list font-primary">
           <li>
-            <a href="#docs">Docs</a>
+            <a
+              href="https://github.com/tenelabs/docsify-sitemap#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Docs</a
+            >
+          </li>
+          <li>
+            <a href="#note">Note</a>
           </li>
           <li>
             <a href="https://www.github.com/tenelabs">
@@ -65,16 +302,6 @@
               />
             </a>
           </li>
-          <li>
-            <a href="https://www.x.com/teneplays">
-              <img
-                src="https://unpkg.com/pixelcdn@latest/public/image/x-dark.svg"
-                alt="x"
-                title="X"
-                class="icon"
-              />
-            </a>
-          </li>
         </ul>
       </nav>
     </header>
@@ -84,11 +311,11 @@
         <form id="sitemapForm">
           <div class="grid">
             <div class="cell">
-              <label for="website">Website URL</label>
+              <label for="url">Website URL</label>
               <input
                 type="url"
-                id="website"
-                name="website"
+                id="url"
+                name="url"
                 placeholder="e.g. https://USERNAME.github.io/REPO-NAME"
                 required
               />
@@ -135,10 +362,7 @@
                 value="main"
                 placeholder="e.g. main"
                 required
-              /><small class="info">
-                Optional — only required if not using the repository
-                root.</small
-              >
+              />
             </div>
             <div class="cell">
               <label for="pat">GitHub Personal Access Token (PAT)</label>
@@ -178,11 +402,11 @@
         <div id="output" class="output">
           <pre
             class="language-xml"
-          ><code class="language-xml" id="sitemapOutput">Click "Generate Sitemap" to start...</code></pre>
+          ><code class="language-xml" id="sitemapOutput">Click "Generate Sitemap".</code></pre>
           <button id="copy" class="copy" onclick="copy()">Copy</button>
         </div>
       </section>
-      <div class="box">
+      <div id="note" class="box">
         <h3 class="font-primary">Note</h3>
         <ol>
           <li>The repository must be public.</li>
@@ -209,25 +433,21 @@
           </li>
         </ol>
       </div>
-
-      <section id="docs">
-        <aside id="toc" class="toc"></aside>
-        <div id="content" class="content"></div>
-      </section>
     </main>
+
     <footer style="text-align: center; padding: 20px 0">
       <p>
         &copy; <span id="current-year"></span>
         <a href="https://github.com/tenelabs" target="_blank" class="link"
           >TenE</a
-        >
-        All rights reserved. |
+        >. All rights reserved. | Licensed under the
         <a
           href="https://github.com/tenelabs/docsify-sitemap/blob/main/LICENSE"
           target="_blank"
           class="link"
-          >MIT License</a
         >
+          MIT License</a
+        >.
       </p>
     </footer>
 
@@ -240,5 +460,40 @@
       type="text/javascript"
       src="https://cdn.jsdelivr.net/npm/toastify-js"
     ></script>
+    <script>
+      const PACKAGE_URL =
+        "https://raw.githubusercontent.com/tenelabs/docsify-sitemap/main/package.json";
+
+      (function init() {
+        fetch("./package.json" || PACKAGE_URL)
+          .then((res) => res.json())
+          .then((pkg) => {
+            document.getElementById("version").textContent = `v${pkg.version}`;
+          })
+          .catch((err) => {
+            console.error("Failed to load version:", err);
+          });
+
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
+
+        const form = document.getElementById("sitemapForm");
+
+        form.addEventListener("input", () => {
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
+          localStorage.setItem("sitemapFormData", JSON.stringify(data));
+        });
+
+        const saved = localStorage.getItem("sitemapFormData");
+        if (saved) {
+          const data = JSON.parse(saved);
+          for (const [key, value] of Object.entries(data)) {
+            const input = form.elements[key];
+            if (input) input.value = value;
+          }
+        }
+      })();
+    </script>
   </body>
 </html>

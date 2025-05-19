@@ -1,5 +1,6 @@
 let generatedXML = "";
 
+// Toast
 window.showToast = function (text, duration = 3000) {
   Toastify({
     text,
@@ -15,21 +16,18 @@ window.showToast = function (text, duration = 3000) {
   }).showToast();
 };
 
+// Form Data
 document.getElementById("sitemapForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const form = e.target;
   const data = new FormData(form);
 
-  // for (const [key, value] of data.entries()) {
-  //   console.log(`${key}: ${value}`);
-  // }
-
-  const website = data.get("website")?.trim();
+  const url = data.get("url")?.trim();
   const owner = data.get("owner")?.trim();
   const repo = data.get("repo")?.trim();
-  const base = data.get("base")?.trim();
-  const branch = data.get("branch")?.trim();
+  const base = data.get("base")?.trim() || "";
+  const branch = data.get("branch")?.trim() || "main";
   const pat = data.get("pat")?.trim();
 
   const output = document.querySelector(".output pre code");
@@ -38,10 +36,11 @@ document.getElementById("sitemapForm").addEventListener("submit", async (e) => {
   output.textContent = "Generating sitemap...";
   downloadBtn.disabled = true;
   document.getElementById("output").scrollIntoView({ behavior: "smooth" });
+
   try {
     showToast("Generating sitemap...");
     generatedXML = await generateSitemap({
-      website,
+      url,
       owner,
       repo,
       base,
@@ -59,76 +58,78 @@ document.getElementById("sitemapForm").addEventListener("submit", async (e) => {
   }
 });
 
-export async function generateSitemap({ website, owner, repo, base, pat }) {
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${website}/</loc>
-  </url>
-</urlset>`;
+// Generate Sitemap
+export async function generateSitemap({ url, owner, repo, base, branch, pat }) {
+  if (url.endsWith("/")) url = url.slice(0, -1);
+
+  const headers = pat
+    ? {
+        Authorization: `token ${pat}`,
+        Accept: "application/vnd.github.v3+json",
+      }
+    : { Accept: "application/vnd.github.v3+json" };
+
+  const api = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+
+  const res = await fetch(api, { headers });
+  if (!res.ok)
+    throw new Error(`Failed to fetch GitHub repo tree: ${res.statusText}`);
+
+  const json = await res.json();
+  console.log(json);
+
+  if (!json.tree) throw new Error("Invalid response from GitHub API");
+
+  let normalizedBase = (base || "").trim();
+  if (
+    normalizedBase === "." ||
+    normalizedBase === "./" ||
+    normalizedBase === "/" ||
+    normalizedBase === ""
+  ) {
+    normalizedBase = "";
+  } else {
+    normalizedBase = normalizedBase.replace(/^\/|\/$/g, "");
+  }
+
+  const files = json.tree.filter(
+    (item) =>
+      item.type === "blob" &&
+      item.path.endsWith(".md") &&
+      (normalizedBase === "" || item.path.startsWith(normalizedBase + "/"))
+  );
+
+  const urls = files.map((file) => {
+    let cleanPath = file.path.replace(/\.md$/, "");
+    return `<url>\n  <loc>${url}/#/${cleanPath}</loc>\n  <priority>0.8</priority>\n</url>`;
+  });
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${url}/</loc>\n    <priority>1.0</priority>\n  </url>\n${urls.join(
+    "\n"
+  )}\n</urlset>`;
+
   return sitemap;
 }
 
-(function init() {
-  fetch("./package.json")
-    .then((res) => res.json())
-    .then((pkg) => {
-      document.getElementById("version").textContent = `v${pkg.version}`;
-    })
-    .catch((err) => {
-      console.error("Failed to load version:", err);
-    });
-
-  fetch("./README.md")
-    .then((res) => res.text())
-    .then((md) => {
-      document.getElementById("content").innerHTML = marked.parse(md);
-      buildTOC();
-    })
-    .catch((err) => {
-      console.error("Failed to load README:", err);
-    });
-
-  document.getElementById("current-year").textContent =
-    new Date().getFullYear();
-
-  const form = document.getElementById("sitemapForm");
-
-  form.addEventListener("input", () => {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-    localStorage.setItem("sitemapFormData", JSON.stringify(data));
-  });
-
-  const saved = localStorage.getItem("sitemapFormData");
-  if (saved) {
-    const data = JSON.parse(saved);
-    for (const [key, value] of Object.entries(data)) {
-      const input = form.elements[key];
-      if (input) input.value = value;
-    }
-  }
-})();
-
+// Copy xml
 window.copy = function () {
   if (!generatedXML) {
-    showToast("Click 'Generate Sitemap' to start.");
+    showToast("Click 'Generate Sitemap' first.");
     return;
   }
   navigator.clipboard
     .writeText(generatedXML)
-    .then(() => {
-      showToast("Sitemap copied to clipboard.");
-    })
+    .then(() => showToast("Sitemap copied to clipboard."))
     .catch((err) => {
       console.error("Failed to copy:", err);
       showToast("Failed to copy to clipboard.");
     });
 };
 
+// Download Sitemap
 window.downloadSitemap = function () {
   if (!generatedXML) {
-    showToast("No sitemap generated yet");
+    showToast("No sitemap generated yet!");
     return;
   }
 
@@ -138,39 +139,3 @@ window.downloadSitemap = function () {
   link.download = "sitemap.xml";
   link.click();
 };
-
-function buildTOC() {
-  const headings = Array.from(
-    document.querySelectorAll("#docs h1, #docs h2, #docs h3")
-  );
-  const tocContainer = document.getElementById("toc");
-  if (!tocContainer || headings.length === 0) return;
-
-  const firstH1Index = headings.findIndex((h) => h.tagName === "H1");
-  if (firstH1Index === -1 || firstH1Index === headings.length - 1) return;
-
-  const relevantHeadings = headings.slice(firstH1Index + 1);
-
-  const tocList = document.createElement("ol");
-  tocList.className = "toc-list";
-
-  relevantHeadings.forEach((heading) => {
-    const level = parseInt(heading.tagName[1]);
-    const text = heading.textContent;
-    const id = heading.id || text.toLowerCase().replace(/[^\w]+/g, "-");
-    heading.id = id;
-
-    const li = document.createElement("li");
-    li.style.marginLeft = `${(level - 1) * 25}px`;
-
-    const link = document.createElement("a");
-    link.href = `#${id}`;
-    link.textContent = text;
-
-    li.appendChild(link);
-    tocList.appendChild(li);
-  });
-
-  tocContainer.innerHTML = "<h3>Table of Contents</h3>";
-  tocContainer.appendChild(tocList);
-}

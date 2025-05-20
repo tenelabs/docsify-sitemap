@@ -25,6 +25,9 @@
   "bin": {
     "docsify-sitemap": "dist/cli.cjs"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tenelabs/docsify-sitemap.git"

@@ -62,17 +62,18 @@ docsify-sitemap [command] [options]
 
 ### Global Options
 
-| Flag                | Description                                                         |
-| ------------------- | ------------------------------------------------------------------- |
-| `-u, --url <url>`   | **(required)** Website URL (e.g. `https://user.github.io/repo`)     |
-| `-o, --owner <o>`   | GitHub owner or organization (required for repo mode)               |
-| `-r, --repo <r>`    | GitHub repository name (required for repo mode)                     |
-| `-b, --base <dir>`  | Base directory within repo or local path (default: `.`)             |
-| `-B, --branch <b>`  | Git branch (default: `main`)                                        |
-| `-p, --pat <token>` | GitHub Personal Access Token for private repos or higher rate limit |
-| `-f, --output <f>`  | Output path and filename (default: `./public/sitemap.xml`)          |
-| `-h, --help`        | Display help for commands                                           |
-| `-V, --version`     | Output the current version                                          |
+| Flag                          | Description                                                               |
+| ----------------------------- | ------------------------------------------------------------------------- |
+| `-u, --url <url>`             | **(required)** Website URL (e.g. `https://user.github.io/repo`)           |
+| `-o, --owner <o>`             | GitHub owner or organization (required for repo mode)                     |
+| `-r, --repo <r>`              | GitHub repository name (required for repo mode)                           |
+| `-b, --base <dir>`            | Base directory within repo or local path (default: `.`)                   |
+| `-B, --branch <b>`            | Git branch (default: `main`)                                              |
+| `-p, --pat <token>`           | GitHub Personal Access Token for private repos or higher rate limit       |
+| `-f, --output <f>`            | Output path and filename (default: `./public/sitemap.xml`)                |
+| `-i, --ignore-dot-underscore` | Ignore files and folders starting with `_` or `.` when generating sitemap |
+| `-h, --help`                  | Display help for commands                                                 |
+| `-V, --version`               | Output the current version                                                |
 
 ### Examples
 
@@ -86,6 +87,7 @@ npx docsify-sitemap \
   -b docs \
   -p YOUR_GH_PAT \
   -f ./docs/sitemap.xml
+  -i
 ```
 
 #### Automated GitHub Action
@@ -146,15 +148,16 @@ npx docsify-sitemap --config docsify-sitemap.config.json
 
 ## 🔧 API & Options Reference
 
-| Option   | Type     | Default                | Description                                |
-| -------- | -------- | ---------------------- | ------------------------------------------ |
-| `url`    | `string` | —                      | **Required.** Site URL or GitHub Pages URL |
-| `owner`  | `string` | —                      | GitHub owner/org (for repo mode)           |
-| `repo`   | `string` | —                      | Repository name (for repo mode)            |
-| `branch` | `string` | `main`                 | Branch containing your Docsify site        |
-| `base`   | `string` | `.`                    | Base folder in repo or local filesystem    |
-| `pat`    | `string` | —                      | GitHub PAT to increase rate limit          |
-| `output` | `string` | `./public/sitemap.xml` | Output file path                           |
+| Option                  | Type      | Default                | Description                                       |
+| ----------------------- | --------- | ---------------------- | ------------------------------------------------- |
+| `url`                   | `string`  | —                      | **Required.** Site URL or GitHub Pages URL        |
+| `owner`                 | `string`  | —                      | GitHub owner/org (for repo mode)                  |
+| `repo`                  | `string`  | —                      | Repository name (for repo mode)                   |
+| `branch`                | `string`  | `main`                 | Branch containing your Docsify site               |
+| `base`                  | `string`  | `.`                    | Base folder in repo or local filesystem           |
+| `pat`                   | `string`  | —                      | GitHub PAT to increase rate limit                 |
+| `output`                | `string`  | `./public/sitemap.xml` | Output file path                                  |
+| `ignore-dot-underscore` | `boolean` | `false`                | Ignore files and folders starting with `_` or `.` |
 
 <!-- s| `config` | `string` | —                      | Path to JSON config file                   | -->
 

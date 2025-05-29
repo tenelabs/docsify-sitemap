@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0](https://github.com/tenelabs/docsify-sitemap/compare/v1.0.1...v1.1.0) (2025-05-29)
+
+### Features
+
+* **cli:** add --ignore-dot-underscore flag and remove interactive mode ([#3](https://github.com/tenelabs/docsify-sitemap/issues/3)) ([e55a5a6](https://github.com/tenelabs/docsify-sitemap/commit/e55a5a6b87b4f828a40d87068947e8bfdeeac64b))
+
+### Bug Fixes
+
+* update OG and Twitter image URL for proper social media previews ([a58d50c](https://github.com/tenelabs/docsify-sitemap/commit/a58d50c5770625dec7bef78cdec544dc9deca3dd))
+
 ## [1.0.1](https://github.com/tenelabs/docsify-sitemap/compare/v1.0.0...v1.0.1) (2025-05-19)
 
 ## 1.0.0 (2025-05-19)

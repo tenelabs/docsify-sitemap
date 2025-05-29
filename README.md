@@ -16,6 +16,10 @@ This tool supports both local filesystem crawling and GitHub repository integrat
 
 Try it now without installing: [Docsify Sitemap Generator Web UI](https://tenelabs.github.io/docsify-sitemap)
 
+### Preview
+
+![Image](https://github.com/user-attachments/assets/47208805-a84e-4a5a-959b-3eb412752fff)
+
 ## Installation
 
 Install as a development dependency:

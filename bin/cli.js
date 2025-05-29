@@ -5,15 +5,14 @@ import chalk from "chalk";
 import pkg from "../package.json";
 import fs from "fs";
 import path from "path";
-import { intro, isCancel, outro, text } from "@clack/prompts";
 
 console.log(chalk.cyan(pkg.displayName || "Docsify Sitemap Generator"));
 
 const program = new Command();
 program
-  .name("sitemapgen")
+  .name(pkg.displayName)
   .version(pkg.version)
-  .description("Generate Docsify sitemap from GitHub or local files")
+  .description(pkg.description)
   .enablePositionalOptions();
 
 function saveSitemap(xml, out = "./public/sitemap.xml") {
@@ -22,10 +21,11 @@ function saveSitemap(xml, out = "./public/sitemap.xml") {
   fs.writeFileSync(out, xml, "utf-8");
 }
 
-function getMarkdownFilesFromLocal(baseDir = ".") {
+function getMarkdownFilesFromLocal(baseDir = ".", ignoreDotUnderscore = false) {
   const root = path.resolve(baseDir);
   function walk(dir) {
     return fs.readdirSync(dir).flatMap((name) => {
+      if (ignoreDotUnderscore && /^[._]/.test(name)) return [];
       const full = path.join(dir, name);
       return fs.statSync(full).isDirectory()
         ? walk(full)
@@ -45,6 +45,7 @@ async function generateSitemap({
   branch = "main",
   pat,
   local,
+  ignoreDotUnderscore = false,
 }) {
   url = url.replace(/\/$/, "");
   let paths = [];
@@ -52,7 +53,7 @@ async function generateSitemap({
   const normBase = base.trim().replace(/^\/|\/$/g, "");
 
   if (local) {
-    paths = getMarkdownFilesFromLocal(normBase);
+    paths = getMarkdownFilesFromLocal(normBase, ignoreDotUnderscore);
   } else {
     if (!owner || !repo) throw new Error("Missing GitHub owner or repo.");
 
@@ -76,7 +77,8 @@ async function generateSitemap({
         (item) =>
           item.type === "blob" &&
           item.path.endsWith(".md") &&
-          (normBase === "" || item.path.startsWith(normBase + "/"))
+          (normBase === "" || item.path.startsWith(normBase + "/")) &&
+          (!ignoreDotUnderscore || !/[\/\\][._]/.test("/" + item.path))
       )
       .map((item) => item.path);
   }
@@ -100,78 +102,20 @@ async function promptOrCancel(fn) {
   return r;
 }
 
-async function runInteractivePrompt() {
-  intro("Docsify Sitemap Generator (interactive)");
-
-  const url = (
-    await promptOrCancel(() =>
-      text({ message: "Site URL", placeholder: "https://example.com" })
-    )
-  ).trim();
-
-  const owner = (
-    await promptOrCancel(() =>
-      text({ message: "GitHub owner", placeholder: "username" })
-    )
-  ).trim();
-
-  const repo = (
-    await promptOrCancel(() =>
-      text({ message: "GitHub repo", placeholder: "repo-name" })
-    )
-  ).trim();
-
-  const base = (
-    await promptOrCancel(() =>
-      text({ message: "Base directory", placeholder: "docs" })
-    )
-  ).trim();
-
-  const branch = (
-    await promptOrCancel(() =>
-      text({ message: "Branch", initialValue: "main" })
-    )
-  ).trim();
-
-  const pat = (
-    await promptOrCancel(() =>
-      text({ message: "GitHub PAT (optional)", placeholder: "ghp_..." })
-    )
-  ).trim();
-
-  const out = (
-    await promptOrCancel(() =>
-      text({ message: "Output path", initialValue: "./public/sitemap.xml" })
-    )
-  ).trim();
-
-  const xml = await generateSitemap({
-    url,
-    owner,
-    repo,
-    base,
-    branch,
-    pat,
-    local: false,
-  });
-
-  saveSitemap(xml, out);
-  console.log(chalk.green(`Sitemap saved to ${out}`));
-  process.exit(0);
-}
-
 program
   .command("local")
   .description("Generate sitemap from local markdown files")
   .requiredOption("-u, --url <url>", "Website URL")
   .option("-b, --base <base>", "Base directory", "")
   .option("-f, --output <file>", "Output path", "./public/sitemap.xml")
+  .option("-i, --ignore-dot-underscore", "Ignore files starting with . or _")
   .action(async (opts) => {
     try {
       const xml = await generateSitemap({
         url: opts.url,
         base: opts.base || "",
         local: true,
+        ignoreDotUnderscore: opts.ignoreDotUnderscore || false,
       });
       saveSitemap(xml, opts.output);
       console.log(chalk.green(`Sitemap saved to ${opts.output}`));
@@ -188,34 +132,8 @@ program
   .option("-b, --base <base>", "Base directory", "")
   .option("-B, --branch <branch>", "Branch", "main")
   .option("-p, --pat <pat>", "GitHub PAT")
-  .option("-f, --output <file>", "Output path", "./public/sitemap.xml");
-
-program.action(async () => {
-  const opts = program.opts();
-  const hasArgs = process.argv.slice(2).length > 0;
-  const ok = opts.url && opts.owner && opts.repo;
-
-  if (!hasArgs || !ok) {
-    return runInteractivePrompt();
-  }
-
-  try {
-    const xml = await generateSitemap({
-      url: opts.url,
-      owner: opts.owner,
-      repo: opts.repo,
-      base: opts.base,
-      branch: opts.branch,
-      pat: opts.pat,
-      local: false,
-    });
-    saveSitemap(xml, opts.output);
-    console.log(chalk.green(`Sitemap saved to ${opts.output}`));
-  } catch (err) {
-    console.error(chalk.red("Error:"), err.message);
-    process.exit(1);
-  }
-});
+  .option("-f, --output <file>", "Output path", "./public/sitemap.xml")
+  .option("-i, --ignore-dot-underscore", "Ignore files starting with . or _");
 
 program.parseAsync(process.argv).catch((err) => {
   console.error(chalk.red("Unhandled Error:"), err.message);

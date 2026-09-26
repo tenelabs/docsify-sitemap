@@ -18,7 +18,7 @@ Try it now without installing: [Docsify Sitemap Generator Web UI](https://tenela
 
 ### Preview
 
-![Image](https://github.com/user-attachments/assets/47208805-a84e-4a5a-959b-3eb412752fff)
+![Image](/assets/preview.jpg)
 
 ## Installation
 
